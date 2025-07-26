@@ -42,7 +42,7 @@ class ExternalApiService
             return null;
         }
 
-        // set payload 
+        // set payload and send. (or Guzzle)
         $response = Http::post("{$this->baseUrl}{$this->dataEndpoint}", [
             'company_id ' => 17, // I'm setting this directly. not sure from where to get.
             'street_number ' => "street_number",
@@ -63,11 +63,13 @@ class ExternalApiService
 
         if ($response->successful()) { // but im not getting any. always return 500 from this API. unable to find api_unique_key
             Log::info('token retrive success');
-            return $response->json('id');
+            return $response->json('id'); // or return data as a JsonResponse. Not sure about the response.
+            // return apiResponseWithStatusCode($data, "success", $message, $user, $statusCode);
         }
 
         Log::warning('Data API failed', ['body' => $response->body()]);
         return null;
+        //  return apiResponseWithStatusCode($data, "error", $message, $user, $statusCode);
     }
 
     /**

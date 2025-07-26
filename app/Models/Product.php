@@ -19,7 +19,8 @@ class Product extends Model
         'name',
         'product_category_id',
         'product_color_id',
-        'description'
+        'description',
+        'status'
     ];
 
     /**
