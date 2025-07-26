@@ -10,9 +10,11 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\View;
+use App\Jobs\UpdateProductStatusJob;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\Action;
 use App\Filament\Resources\ProductsResource\Pages;
 use App\Filament\Resources\ProductsResource\RelationManagers\TypeAssignmentRelationManager;
 
@@ -48,7 +50,7 @@ class ProductsResource extends Resource
                             ->maxLength(500)
                             ->columnSpan(2),
 
-                         // Product Category Select
+                        // Product Category Select
                         Select::make('product_category_id')
                             ->label('Category')
                             ->relationship('category', 'name')
@@ -103,6 +105,16 @@ class ProductsResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+
+                // Job action - not sure this is the requirment and its correct. :). ha ha
+                Action::make('Mark Processed')
+                    ->label('Mark Processed')
+                    ->action(function (Product $record) {
+                        UpdateProductStatusJob::dispatch($record);
+                    })
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->icon('heroicon-o-check')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
