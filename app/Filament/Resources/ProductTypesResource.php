@@ -10,6 +10,10 @@ use App\Models\ProductType;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+
+use Filament\Forms\Components\Actions\Action;
+use Filament\Notifications\Notification;
+use App\Services\ExternalApiService;
 use App\Filament\Resources\ProductTypesResource\Pages;
 
 class ProductTypesResource extends Resource
@@ -42,8 +46,34 @@ class ProductTypesResource extends Resource
                     ->label('Api Unique Number')
                     ->maxLength(100)
                     ->unique(
-                        ignoreRecord: true,
-                    ),
+                        ignoreRecord: true
+                    )
+                    ->suffixAction(
+                        Action::make('fetchFromApi')
+                            ->icon('heroicon-m-arrow-path')
+                            ->tooltip('Fetch from API')
+                            ->action(function ($state, callable $set) {
+                                $apiService = app(ExternalApiService::class);
+
+                                $fetchedId = $apiService->fetchApiUniqueId();
+
+                                if ($fetchedId) {
+                                    $set('api_unique_number', $fetchedId);
+
+                                    Notification::make()
+                                        ->title('ID fetched successfully')
+                                        ->success()
+                                        ->body("Fetched ID: {$fetchedId}")
+                                        ->send();
+                                } else {
+                                    Notification::make()
+                                        ->title('API request failed')
+                                        ->danger()
+                                        ->body('Could not fetch ID from API.')
+                                        ->send();
+                                }
+                            })
+                    )
 
             ]);
     }
