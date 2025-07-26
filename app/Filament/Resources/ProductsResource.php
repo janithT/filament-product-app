@@ -9,6 +9,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\View;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -60,6 +61,9 @@ class ProductsResource extends Resource
                             ->relationship('color', 'name')
                             ->required()
                             ->columnSpan(1),
+
+                        View::make('filament.components.status-bar')
+                            ->columnSpanFull(),
 
                     ]),
             ]);

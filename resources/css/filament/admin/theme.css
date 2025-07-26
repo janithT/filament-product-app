@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+@import '../../../../vendor/filament/filament/resources/css/base.css';
+
+@config 'tailwind.config.js';
+
+/* Change the sidebar color */
+@layer components {
+  .fi-sidebar .fi-sidebar-nav {
+    @apply bg-blue-900 text-white;
+  }
+
+  .fi-sidebar .fi-sidebar-item-active {
+    @apply bg-gray-800;
+  }
+
+  .fi-sidebar .fi-sidebar-item:hover {
+    @apply bg-gray-700;
+  }
+
+  /* SIde bar labels */
+  .fi-sidebar-item-label {
+    @apply !text-gray-900 dark:!text-white;
+  }
+}
